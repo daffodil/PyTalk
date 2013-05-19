@@ -87,7 +87,7 @@ class Ui_ConnectionDialog(object):
         QtCore.QObject.connect(self.buttonBox,QtCore.SIGNAL("rejected()"),ConnectionDialog.reject)
         QtCore.QMetaObject.connectSlotsByName(ConnectionDialog)
 
-    def retranslateUi(self, ConnectionDialog):
+    def rsetranslateUi(self, ConnectionDialog):
         ConnectionDialog.setWindowTitle(QtGui.QApplication.translate("ConnectionDialog", "Connection Dialog", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox.setTitle(QtGui.QApplication.translate("ConnectionDialog", "Login\'s informations", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("ConnectionDialog", "Jabber ID:", None, QtGui.QApplication.UnicodeUTF8))

@@ -2,7 +2,8 @@ from PyQt4.QtGui import QDialog
 from PyQt4.QtCore import QSettings, QVariant, SIGNAL
 from ui.ui_ConnectionDialog import Ui_ConnectionDialog
 
-class ConnectionDialog(QDialog, Ui_ConnectionDialog):
+
+class DEADConnectionDialog(QDialog, Ui_ConnectionDialog):
     def __init__(self, parent):
         QDialog.__init__(self, parent)
         self.setupUi(self)

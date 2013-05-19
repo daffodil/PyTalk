@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
+
+import xmpp	
 import time
-import xmpp
 import sys
 import settings
 import platform
