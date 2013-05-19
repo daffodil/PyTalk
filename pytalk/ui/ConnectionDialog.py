@@ -8,26 +8,22 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import SIGNAL, SLOT
 
 class ConnectionDialog(QtGui.QDialog):
 	
 	def __init__(self, parent=None):
-		QtGui.QDialog.__init__(parent)
+		QtGui.QDialog.__init__(self)
 		
 		#self.setObjectName("ConnectionDialog")
 		#ConnectionDialog.resize(QtCore.QSize(QtCore.QRect(0,0,289,277).size()).expandedTo(ConnectionDialog.minimumSizeHint()))
 		
-		self.vboxlayout = QtGui.QVBoxLayout(self)
-		self.vboxlayout.setObjectName("vboxlayout")
-		
-		self.groupBox = QtGui.QGroupBox(ConnectionDialog)
-		self.groupBox.setObjectName("groupBox")
-		
+		self.vboxlayout = QtGui.QVBoxLayout(self)		
+		self.groupBox = QtGui.QGroupBox()
+
 		self.gridlayout = QtGui.QGridLayout(self.groupBox)
-		self.gridlayout.setObjectName("gridlayout")
 		
 		self.label = QtGui.QLabel(self.groupBox)
-		self.label.setObjectName("label")
 		self.gridlayout.addWidget(self.label,0,0,1,1)
 		
 		self.userID = QtGui.QLineEdit(self.groupBox)
@@ -44,7 +40,7 @@ class ConnectionDialog(QtGui.QDialog):
 		self.gridlayout.addWidget(self.password,1,1,1,1)
 		self.vboxlayout.addWidget(self.groupBox)
 		
-		self.groupBox_2 = QtGui.QGroupBox(ConnectionDialog)
+		self.groupBox_2 = QtGui.QGroupBox()
 		self.groupBox_2.setObjectName("groupBox_2")
 		
 		self.gridlayout1 = QtGui.QGridLayout(self.groupBox_2)
@@ -79,49 +75,54 @@ class ConnectionDialog(QtGui.QDialog):
 		self.gridlayout1.addWidget(self.useSSL,1,2,1,1)
 		self.vboxlayout.addWidget(self.groupBox_2)
 		
-		self.buttonBox = QtGui.QDialogButtonBox(ConnectionDialog)
+		self.buttonBox = QtGui.QDialogButtonBox()
 		self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
 		self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.NoButton|QtGui.QDialogButtonBox.Ok)
 		self.buttonBox.setObjectName("buttonBox")
 		self.vboxlayout.addWidget(self.buttonBox)
 		
-		self.retranslateUi(ConnectionDialog)
-		QtCore.QObject.connect(self.buttonBox,QtCore.SIGNAL("accepted()"),ConnectionDialog.accept)
-		QtCore.QObject.connect(self.buttonBox,QtCore.SIGNAL("rejected()"),ConnectionDialog.reject)
-		QtCore.QMetaObject.connectSlotsByName(ConnectionDialog)
-		self.connect(self, SIGNAL("accepted()"), self.saveSettings)
+		self.retranslateUi()
+		QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("accepted()"), self.on_accept)
+		QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("rejected()"), self.reject)
+		#QtCore.QMetaObject.connectSlotsByName()
+		#self.connect(self, SIGNAL("accepted()"), self.saveSettings)
 		self.readSettings()
+		
+		
+	def on_accept(self):
+		self.saveSettings()
+		self.accept()
 
 	def readSettings(self):
-		settings = QSettings("Trunat", "PyTalk")
+		settings = QtCore.QSettings("Trunat", "PyTalk")
 		settings.beginGroup("Connection")
 		self.userID.setText(settings.value("userID").toString())
 		self.password.setText(settings.value("password").toString())
 		self.server.setText(settings.value("server").toString())
-		self.useSSL.setChecked(settings.value("useSSL", QVariant(True)).toBool())
+		self.useSSL.setChecked(settings.value("useSSL", QtCore.QVariant(True)).toBool())
 
 		if self.useSSL.isChecked():
-			self.port.setText(settings.value("port", QVariant("5223")).toString())
+			self.port.setText(settings.value("port", QtCore.QVariant("5223")).toString())
 		else:
-			self.port.setText(settings.value("port", QVariant("5222")).toString())
+			self.port.setText(settings.value("port", QtCore.QVariant("5222")).toString())
 
-		self.ressource.setText(settings.value("ressource", QVariant("PyTalk")).toString())
+		self.ressource.setText(settings.value("ressource", QtCore.QVariant("PyTalk")).toString())
 		settings.endGroup()
 
 	def saveSettings(self):
-		settings = QSettings("Trunat", "PyTalk")
+		settings = QtCore.QSettings("Trunat", "PyTalk")
 		settings.beginGroup("Connection")
-		settings.setValue("userID", QVariant(self.userID.text()))
-		settings.setValue("password", QVariant(self.password.text()))
-		settings.setValue("server", QVariant(self.server.text()))
-		settings.setValue("port", QVariant(int(self.port.text())))
-		settings.setValue("ressource", QVariant(self.ressource.text()))
-		settings.setValue("useSSL", QVariant(self.useSSL.isChecked()))
+		settings.setValue("userID", QtCore.QVariant(self.userID.text()))
+		settings.setValue("password", QtCore.QVariant(self.password.text()))
+		settings.setValue("server", QtCore.QVariant(self.server.text()))
+		settings.setValue("port", QtCore.QVariant(int(self.port.text())))
+		settings.setValue("ressource", QtCore.QVariant(self.ressource.text()))
+		settings.setValue("useSSL", QtCore.QVariant(self.useSSL.isChecked()))
 		settings.endGroup()
-		self.emit(SIGNAL("configured()"))
+		self.emit( SIGNAL("configured()") )
 		
-	def setranslateUi(self, ConnectionDialog):
-		ConnectionDialog.setWindowTitle(QtGui.QApplication.translate("ConnectionDialog", "Connection Dialog", None, QtGui.QApplication.UnicodeUTF8))
+	def retranslateUi(self):
+		self.setWindowTitle(QtGui.QApplication.translate("ConnectionDialog", "Connection Dialog", None, QtGui.QApplication.UnicodeUTF8))
 		self.groupBox.setTitle(QtGui.QApplication.translate("ConnectionDialog", "Login\'s informations", None, QtGui.QApplication.UnicodeUTF8))
 		self.label.setText(QtGui.QApplication.translate("ConnectionDialog", "Jabber ID:", None, QtGui.QApplication.UnicodeUTF8))
 		self.label_2.setText(QtGui.QApplication.translate("ConnectionDialog", "Password:", None, QtGui.QApplication.UnicodeUTF8))

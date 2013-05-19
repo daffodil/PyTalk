@@ -23,10 +23,12 @@ import datetime
 
 from PyQt4.QtGui import *
 from PyQt4.QtCore import SIGNAL, SLOT, Qt, QSize, QTimer
-from ui.ui_mainwindow import Ui_MainWindow
+
+from ui.MainWindow import MainWindow
+from ui.ConnectionDialog import ConnectionDialog
 
 from AboutDialog import AboutDialog
-from ui.ConnectionDialog import ConnectionDialog
+
 from ConnectorThread import ConnectorThread
 from MessageBox import MessageBox
 from BuddyList import BuddyList
@@ -38,7 +40,7 @@ from jabber import STATUS
 
 
 
-class MainWindow(QMainWindow, Ui_MainWindow):
+class DEDMainWindow(QMainWindow):# Ui_MainWindow):
 	connectorThread = None
 
 	def __init__(self, parent = None):
@@ -97,7 +99,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 		QTimer.singleShot(500, self.show_connection_dialog)
 		
 	def show_connection_dialog(self):
-		d = ConnectionDialog()
+		d = ConnectionDialog(self)
 		d.exec_()
 		
 
@@ -153,7 +155,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 		self.disconnect()
 		sys.exit(0)
 
-	def changeStatus(self, index=-1):
+	def on_change_status(self, index=-1):
 		if index == -1:
 			index = self.statusBox.currentIndex()
 		if index == STATUS.unavailable.index:

@@ -11,6 +11,7 @@ class BuddyList(QTreeWidget):
 
     def __init__(self, parent):
         QTreeWidget.__init__(self, parent)
+        
         self.connection = None
         # QTreeWidgetItem configuration
         self.header().hide()
@@ -33,7 +34,7 @@ class BuddyList(QTreeWidget):
     def setConnection(self, con):
         self.connection = con
         
-    def addItem(self, jid):
+    def add_item(self, jid):
         if self.connection:
             group = self.connection.getGroups(jid)[0]
             self.addGroup(group)
@@ -43,7 +44,7 @@ class BuddyList(QTreeWidget):
             self.groups[group].addChild(self.buddies[jid])
             self.tree[group][jid] = self.buddies[jid]
         
-    def addGroup(self, group):
+    def add_group(self, group):
         if group:
             if group not in self.groups.keys():
                 self.groups[group] = BuddyGroup(group)
