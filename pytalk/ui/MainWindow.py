@@ -252,7 +252,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.actionConnection.setEnabled(True)
 		self.actionDeconnection.setEnabled(False)
 		self.statusEdit.hide()
-		self.statusBox.setCurrentIndex(STATUS.unavailable.index)
+		self.statusCombo.setCurrentIndex(STATUS.unavailable.index)
 		if self.connectorThread:
 			self.connectorThread.disconnect()
 			self.connectorThread = None
@@ -287,7 +287,7 @@ class MainWindow(QtGui.QMainWindow):
 	def on_change_status(self, index=-1):
 		print "on_status", index
 		if index == -1:
-			index = self.statusBox.currentIndex()
+			index = self.statusCombo.currentIndex()
 		if index == STATUS.unavailable:
 			self.statusEdit.hide()
 			self.disconnect()
