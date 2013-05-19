@@ -8,6 +8,7 @@ print "===========", project_path
 if not project_path in sys.path:
 	sys.path.append(project_path)
 """
+import settings
 
 inc_paths = ["enum-0.4.3", "pydns-2.3.1", "xmpppy-CVS20080120"]
 
@@ -212,6 +213,10 @@ class DEDMainWindow(QMainWindow):# Ui_MainWindow):
 
 if __name__ == "__main__":
 	app = QApplication(sys.argv)
+	app.setOrganizationName( "GSTL" );
+	app.setOrganizationDomain( "pytalk.trunat.fr" );
+	app.setApplicationName( settings.APPNAME );
+	app.setApplicationVersion( settings.VERSION );
 	window = MainWindow()
 	window.show()
 	sys.exit(app.exec_())

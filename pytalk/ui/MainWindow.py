@@ -4,7 +4,7 @@ import sys
 import datetime
 
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import SIGNAL
+from PyQt4.QtCore import SIGNAL, SLOT
 
 from jabber import STATUS
 
@@ -27,6 +27,9 @@ class MainWindow(QtGui.QMainWindow):
 		#self.resize(QtCore.QSize(QtCore.QRect(0,0,316,407).size()).expandedTo(MainWindow.minimumSizeHint()))
 		self.setWindowIcon(QtGui.QIcon("images/im-jabber.png"))
 		self.setUnifiedTitleAndToolBarOnMac(False)
+
+		toolbar = QtGui.QToolBar()
+		self.addToolBar(QtCore.Qt.TopToolBarArea, toolbar)
 
 		## Central Widget and Layout
 		self.centralwidget = QtGui.QWidget()
@@ -66,7 +69,6 @@ class MainWindow(QtGui.QMainWindow):
 
 		self.actionConnection = QtGui.QAction(self)
 		self.actionConnection.setIcon(QtGui.QIcon("images/status/log-in.png"))
-		self.actionConnection.setObjectName("actionConnection")
 
 		self.actionDeconnection = QtGui.QAction(self)
 		self.actionDeconnection.setEnabled(False)
@@ -108,8 +110,13 @@ class MainWindow(QtGui.QMainWindow):
 
 		self.actionConsole = QtGui.QAction(self)
 		self.actionConsole.setObjectName("actionConsole")
+		
 		self.menuContacts.addAction(self.actionConnection)
+		toolbar.addAction(self.actionConnection)
+		
 		self.menuContacts.addAction(self.actionDeconnection)
+		toolbar.addAction(self.actionDeconnection)
+		
 		self.menuContacts.addAction(self.actionQuit)
 		self.menuAffichage.addAction(self.actionOffline_buddies)
 		self.menuAffichage.addAction(self.actionAway_buddies)
@@ -175,8 +182,9 @@ class MainWindow(QtGui.QMainWindow):
 		"""
 		about = AboutDialog(self)
 		self.connect(self.actionAbout, SIGNAL("triggered()"), about, SLOT("exec()"))
-		self.connect(self.actionAboutQt, SIGNAL("triggered()"), QApplication.instance(), SLOT("aboutQt()"))
 		"""
+		self.connect(self.actionAboutQt, SIGNAL("triggered()"), QtGui.QApplication.instance(), SLOT("aboutQt()"))
+		
 		
 		# Quit Signal connection
 		self.connect(self.actionQuit, SIGNAL("triggered()"), self.quit)
@@ -248,7 +256,7 @@ class MainWindow(QtGui.QMainWindow):
 		if self.connectorThread:
 			self.connectorThread.disconnect()
 			self.connectorThread = None
-		self.BuddyList.clear()
+		self.buddyList.clear()
 		QtGui.QApplication.instance().quit()
 		
 			
@@ -261,7 +269,7 @@ class MainWindow(QtGui.QMainWindow):
 			self.connectorThread.set_status(self.statusCombo.currentIndex(), self.statusEdit.text())
 		self.statusEdit.show()
 		self.statusEdit.setFocus()
-		self.BuddyList.setConnection(self.connectorThread)
+		self.buddyList.setConnection(self.connectorThread)
 		self.getRoster()
 		self.setAway()
 		self.setOffline()
@@ -300,12 +308,12 @@ class MainWindow(QtGui.QMainWindow):
 	def setAway(self, checked=-1):
 		if checked == -1:
 			checked = self.actionAway_buddies.isChecked()
-		self.BuddyList.setAway(not checked)
+		self.buddyList.setAway(not checked)
 			
 	def setOffline(self, checked=-1):
 		if checked == -1:
 			checked = self.actionOffline_buddies.isChecked()
-		self.BuddyList.setOffline(not checked)
+		self.buddyList.setOffline(not checked)
 
 	def subscriptionRequest(self, presence):
 		request = RosterRequest(self, self.connectorThread.jabber, presence)
@@ -326,7 +334,7 @@ class MainWindow(QtGui.QMainWindow):
 				jid = item.jid
 			else:
 				jid = ""
-			newBuddy = AddBuddyDialog(self, self.connectorThread.jabber, self.BuddyList.groups.keys(), jid)
+			newBuddy = AddBuddyDialog(self, self.connectorThread.jabber, self.buddyList.groups.keys(), jid)
 			newBuddy.show()
 
 	def on_add_group(self):

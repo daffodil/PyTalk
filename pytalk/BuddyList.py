@@ -37,7 +37,7 @@ class BuddyList(QTreeWidget):
     def add_item(self, jid):
         if self.connection:
             group = self.connection.getGroups(jid)[0]
-            self.addGroup(group)
+            self.add_group(group)
             if jid not in self.buddies.keys():
                 self.buddies[jid] = BuddyItem(self.groups[group],jid, self.connection)
                 self.buddies[jid].setName(self.connection.getName(jid))

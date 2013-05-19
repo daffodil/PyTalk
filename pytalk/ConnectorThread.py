@@ -7,7 +7,7 @@ import settings
 import platform
 from PyQt4.QtCore import QSettings, QVariant, QThread, SIGNAL
 from PyQt4.QtGui import QMessageBox
-from jabber import STATUS
+from jabber import STATUS, STATUS_TEXT
 
 class ConnectorThread(QThread):
 	"""
@@ -15,10 +15,12 @@ class ConnectorThread(QThread):
 	Jabber server and the PyTalk client.
 	"""
 
-	def __init__(self, status):
+	def __init__(self, status, debug=True):
 		"We initialise a new Thread and create the connection with the Jabber Server"
 		QThread.__init__(self)
+			
 		self.status = status
+		self.debug = debug
 	
 	def run(self):
 		"We are running the thread and are reading and sending informations to the Jabber server"
@@ -118,7 +120,7 @@ class ConnectorThread(QThread):
 		"""Send a presence packet"""
 		print "change_status", showId, status
 		p = xmpp.protocol.Presence()
-		p.setShow(STATUS_TEST[showId])
+		p.setShow(STATUS_TEXT[showId])
 		if status:
 			p.setStatus(status)
 		if showId == STATUS.available:

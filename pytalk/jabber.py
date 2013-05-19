@@ -15,6 +15,6 @@ class STATUS:
 	invisible = 6
 
 DEADSTATUS = Enum('available', 'chat', 'dnd', 'away', 'xa', 'unavailable', 'invisible')
-STATUS_TEST = ['available', 'chat', 'dnd', 'away', 'xa', 'unavailable', 'invisible']
+STATUS_TEXT = ['available', 'chat', 'dnd', 'away', 'xa', 'unavailable', 'invisible']
 DISPLAY_STATUS  = (tr('Available'), tr('Chat'), tr('Do not Disturb'), tr('Away'), tr('Unavailable'), tr('Offline'), tr('Invisible'))
 STATUS_IMAGE    = ('available.png', 'chat.png', 'busy.png', 'away.png', 'extended-away.png', 'offline.png', 'offline.png')
